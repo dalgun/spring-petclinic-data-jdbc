@@ -12,3 +12,8 @@ target/*
 !.vscode/launch.json
 !.vscode/extensions.json
 _site/
+/build
+/.gradle
+.gradle/6.5/vcsMetadata-1/
+build/generated/
+/gradle/wrapper/
