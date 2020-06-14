@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: petclinic-service
+  labels:
+    app: petclinic
+  #namespace는 default를 사용한다.
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: petclinic
+  replicas: 1
+  minReadySeconds: 30
+  strategy:
+    #배포 시와 scale in/out 시 유실되는 트래픽이 없어야 한다.
+    type: RollingUpdate
+    rollingUpdate: {}
+  template:
+    metadata:
+      labels:
+        app: petclinic
+    spec:
+      #어플리케이션 프로세스는 root 계정이 아닌 uid:1000으로 실행한다.
+      securityContext:
+        runAsUser: 1000
+        fsGroup: 1000
+      #종료 시 30초 이내에 프로세스가 종료되지 않으면 SIGKILL로 강제 종료 시킨다.
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: petclinic
+          image: dalgun/spring-petclinic-data-jdbc:2.1.0.BUILD-SNAPSHOT
+          imagePullPolicy: Always
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "minikube"
+          #어플리케이션의 log는 host의 /logs 디렉토리에 적재되도록 한다.
+          volumeMounts:
+            - mountPath: /logs
+              name: log-volume
+          ports:
+            - name: petclinic-port
+              containerPort: 8080
+          #정상 동작 여부를 반환하는 api를 구현하며, 10초에 한번 체크하도록 한다. 3번 연속 체크에 실패하 면 어플리케이션은 restart 된다.
+          livenessProbe:
+            failureThreshold: 3
+            periodSeconds: 10
+            httpGet:
+              path: /manage/health
+              port: 8080
+              scheme: HTTP
+          #배포 시와 scale in/out 시 유실되는 트래픽이 없어야 한다.
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /manage/health
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+      #어플리케이션의 log는 host의 /logs 디렉토리에 적재되도록 한다.
+      volumes:
+        - name: log-volume
+          hostPath: 
+            path: /logs
+            type: DirectoryOrCreate
+   
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: petclinic-service
+spec:
+  ports:
+    - name: petclinic-port
+      port: 80
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app: petclinic

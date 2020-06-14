@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <springProfile name="console-log">
+        <!-- Send debug messages to System.out -->
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <!-- By default, encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
+            <encoder>
+                <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n</pattern>
+            </encoder>
+        </appender>
+    </springProfile>
+
+    <!-- Send debug message to file -->
+    <!-- 어플리케이션의 log는 host의 /logs 디렉토리에 적재되도록 한다.-->
+    <springProfile name="file-log">
+        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>/logs/spring-boot-logging.log</file>
+
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            </encoder>
+
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>/logs/spring-boot-logging.%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+
+                <!-- each file should be at most 10MB, keep 30 days worth of history -->
+                <maxHistory>30</maxHistory>
+                <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <maxFileSize>10MB</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
+            </rollingPolicy>
+        </appender>
+    </springProfile>
+    <root level="INFO">
+        <springProfile name="console-log">
+            <appender-ref ref="STDOUT"/>
+        </springProfile>
+        <springProfile name="file-log">
+            <appender-ref ref="FILE"/>
+        </springProfile>
+    </root>
+</configuration>
+
