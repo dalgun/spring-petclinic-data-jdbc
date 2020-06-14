@@ -1,9 +1,6 @@
 # DEVSOPS 사전과제
 > 사전과제 제출용으로  특정 기한 이후 제거 예정입니다
 
-![]("https://img.shields.io/badge/TEST-%ED%95%A9%EA%B2%A9%EA%B8%B0%EC%9B%90-red?logo=github")
-
-
 ## Installation
 
 OS X :
@@ -69,4 +66,6 @@ kubectl apply -f ingress.yml
 ```sh
 minikube ip
 ```
+
+![](complete.png)
 
