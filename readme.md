@@ -1,3 +1,8 @@
+![license](https://img.shields.io/github/license/dalgun/spring-petclinic-data-jdbc)
+![java](https://img.shields.io/badge/java-1.8-red)
+![gradle](https://img.shields.io/badge/gradle-6.5-blue)
+![maven](https://img.shields.io/badge/maven-3.5.4-yellow)
+![minikube](https://img.shields.io/badge/minikube-1.11.0-important)
 # DEVSOPS 사전과제
 > 사전과제 제출용으로  특정 기한 이후 제거 예정입니다
 
