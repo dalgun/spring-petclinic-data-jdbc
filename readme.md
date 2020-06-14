@@ -1,24 +1,74 @@
-# Spring PetClinic Sample Application built with Spring Data JDBC
+# DEVSOPS 사전과제
+> 사전과제 제출용으로  특정 기한 이후 제거 예정입니다
 
-This is a branch of the official [Spring PetClinic](https://github.com/spring-projects/spring-petclinic) application with domain & persistence layer built with [Spring Data JDBC](https://projects.spring.io/spring-data-jdbc/) instead of [Spring Data JPA](https://projects.spring.io/spring-data-jpa/).
+[![뱃지]("https://img.shields.io/badge/TEST-%ED%95%A9%EA%B2%A9%EA%B8%B0%EC%9B%90-red?logo=github")]
 
-Additionally:
 
-- uses [TestContainers](http://testcontainers.org/) to spin up MySQL during integtation tests
-- uses [Wavefront](https://www.wavefront.com/) for monitoring
+![](header.png)
 
-Check original project [readme](https://github.com/spring-projects/spring-petclinic/blob/master/readme.md) for introduction the project, how to run, and how to contribute.
+## Installation
 
-## Understanding the Spring Petclinic application with a few diagrams
+OS X :
 
-[See the presentation here](http://fr.slideshare.net/AntoineRey/spring-framework-petclinic-sample-application)
+```sh
+brew install minikube
+```
 
-## Interesting Spring Petclinic forks
 
-The Spring Petclinic master branch in the main [spring-projects](https://github.com/spring-projects/spring-petclinic)
-GitHub org is the "canonical" implementation, currently based on Spring Boot and Thymeleaf.
+## Prepared Minikube
 
-This [spring-petclinic-data-jdbc](https://github.com/spring-petclinic/spring-petclinic-data-jdbc) project is one of the [several forks](https://spring-petclinic.github.io/docs/forks.html) 
-hosted in a special GitHub org: [spring-petclinic](https://github.com/spring-petclinic).
-If you have a special interest in a different technology stack
-that could be used to implement the Pet Clinic then please join the community there.
+Kubernetes Host 관련 작업을 선행합니다.
+
+미니큐브 시작
+
+```sh
+minikube start
+minikube ssh
+$> sudo su -
+#> mkdir /logs
+#> chown -R 1000:1000 /logs
+```
+
+
+## Development setup
+
+### git clone
+
+
+```sh
+git clone https://github.com/dalgun/spring-petclinic-data-jdbc.git
+```
+
+### docker hub push
+#### Maven 사용 
+
+Master Branch 그대로 명령어 실행
+
+```sh
+cd spring-petclinic-data-jdbc
+mvn clean install
+```
+
+#### gradle 사용
+
+Gradle Branch 로 변경 후 빌드
+
+```sh
+cd spring-petclinic-data-jdbc
+git checkout gradle
+gradle jib
+```
+
+## Apply for Kubernets local
+```sh
+cd spring-petclinic-data-jdbc/manifest
+kubectl apply -f mysql.yml
+kubectl apply -f petclinic.yml
+kubectl apply -f ingress.yml
+```
+
+## Check
+```sh
+minikube ip
+```
+
