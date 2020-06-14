@@ -5,12 +5,12 @@
 plugins {
     id 'java'
     id 'maven-publish'
-    id "com.github.voplex95.lesscompiler" version "1.0.2"
+    id 'com.google.cloud.tools.jib' version '2.4.0'
 }
 
 repositories {
     mavenCentral()
-
+    mavenLocal()
     maven {
         url = uri('https://repo.spring.io/snapshot')
     }
@@ -62,8 +62,21 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
-lessCompile {
-    source = file('src/main/less')
-    target = file('src/main/resources/static/resources/css')
-    compress = true
+//gradle을 사용하여 어플리케이션과 도커이미지를 빌드한다.
+jib {
+    from {
+        image = "openjdk:8u222-jre"
+    }
+    to {
+        image = "dalgun/spring-petclinic-data-jdbc"
+        tags = ["${project.version}".toString()]
+        auth {
+            username = "dalgun"
+            password = "855da9db-c54d-479f-881d-8e5ce68299ef"
+        }
+    }
+    container {
+        mainClass = "org.springframework.samples.petclinic.PetClinicApplication"
+        creationTime = "USE_CURRENT_TIMESTAMP"
+    }
 }
