@@ -265,6 +265,11 @@
                 <configuration>
                     <from>
                         <image>openjdk:8u222-jre</image>
+                        <auth>
+                            <username>dalgun</username>
+                            <!-- DOCKER HUB API TOKEN -->
+                            <password>855da9db-c54d-479f-881d-8e5ce68299ef</password>
+                        </auth>
                     </from>
                     <to>
                         <image>dalgun/${project.artifactId}:${project.version}</image>
