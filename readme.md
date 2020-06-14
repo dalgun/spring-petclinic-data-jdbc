@@ -1,4 +1,5 @@
 ![license](https://img.shields.io/github/license/dalgun/spring-petclinic-data-jdbc)
+![os](https://img.shields.io/badge/os-mac-blueviolet)
 ![java](https://img.shields.io/badge/java-1.8-red)
 ![gradle](https://img.shields.io/badge/gradle-6.5-blue)
 ![maven](https://img.shields.io/badge/maven-3.5.4-yellow)
